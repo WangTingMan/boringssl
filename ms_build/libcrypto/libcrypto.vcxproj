@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{cabb2c8c-c284-48ab-bd0c-bc58bbd4ffea}</ProjectGuid>
+    <RootNamespace>libcrypto</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)..\..\src\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;LIBCRYPTO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;LIBCRYPTO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;LIBCRYPTO_EXPORTS;_WINDOWS;_USRDLL;OPENSSL_NO_ASM;BORINGSSL_IMPLEMENTATION;BORINGSSL_SHARED_LIBRARY;OPENSSL_ASM_INCOMPATIBLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>ws2_32.lib;libcrypto_sources.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;LIBCRYPTO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\crypto\fipsmodule\bcm.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\aesni-gcm-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\aesni-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\ghash-ssse3-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\ghash-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\md5-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\p256-x86_64-asm.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\p256_beeu-x86_64-asm.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\rdrand-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\rsaz-avx2.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\sha1-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\sha256-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\sha512-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\vpaes-x86_64.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\x86_64-mont.asm" />
+    <None Include="..\..\win-x86_64\crypto\fipsmodule\x86_64-mont5.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\include\openssl\aead.h" />
+    <ClInclude Include="..\..\src\include\openssl\aes.h" />
+    <ClInclude Include="..\..\src\include\openssl\arm_arch.h" />
+    <ClInclude Include="..\..\src\include\openssl\asn1.h" />
+    <ClInclude Include="..\..\src\include\openssl\asn1t.h" />
+    <ClInclude Include="..\..\src\include\openssl\asn1_mac.h" />
+    <ClInclude Include="..\..\src\include\openssl\base.h" />
+    <ClInclude Include="..\..\src\include\openssl\base64.h" />
+    <ClInclude Include="..\..\src\include\openssl\bio.h" />
+    <ClInclude Include="..\..\src\include\openssl\blake2.h" />
+    <ClInclude Include="..\..\src\include\openssl\blowfish.h" />
+    <ClInclude Include="..\..\src\include\openssl\bn.h" />
+    <ClInclude Include="..\..\src\include\openssl\buf.h" />
+    <ClInclude Include="..\..\src\include\openssl\buffer.h" />
+    <ClInclude Include="..\..\src\include\openssl\bytestring.h" />
+    <ClInclude Include="..\..\src\include\openssl\cast.h" />
+    <ClInclude Include="..\..\src\include\openssl\chacha.h" />
+    <ClInclude Include="..\..\src\include\openssl\cipher.h" />
+    <ClInclude Include="..\..\src\include\openssl\cmac.h" />
+    <ClInclude Include="..\..\src\include\openssl\conf.h" />
+    <ClInclude Include="..\..\src\include\openssl\cpu.h" />
+    <ClInclude Include="..\..\src\include\openssl\crypto.h" />
+    <ClInclude Include="..\..\src\include\openssl\ctrdrbg.h" />
+    <ClInclude Include="..\..\src\include\openssl\curve25519.h" />
+    <ClInclude Include="..\..\src\include\openssl\des.h" />
+    <ClInclude Include="..\..\src\include\openssl\dh.h" />
+    <ClInclude Include="..\..\src\include\openssl\digest.h" />
+    <ClInclude Include="..\..\src\include\openssl\dsa.h" />
+    <ClInclude Include="..\..\src\include\openssl\dtls1.h" />
+    <ClInclude Include="..\..\src\include\openssl\ec.h" />
+    <ClInclude Include="..\..\src\include\openssl\ecdh.h" />
+    <ClInclude Include="..\..\src\include\openssl\ecdsa.h" />
+    <ClInclude Include="..\..\src\include\openssl\ec_key.h" />
+    <ClInclude Include="..\..\src\include\openssl\engine.h" />
+    <ClInclude Include="..\..\src\include\openssl\err.h" />
+    <ClInclude Include="..\..\src\include\openssl\evp.h" />
+    <ClInclude Include="..\..\src\include\openssl\evp_errors.h" />
+    <ClInclude Include="..\..\src\include\openssl\ex_data.h" />
+    <ClInclude Include="..\..\src\include\openssl\e_os2.h" />
+    <ClInclude Include="..\..\src\include\openssl\hkdf.h" />
+    <ClInclude Include="..\..\src\include\openssl\hmac.h" />
+    <ClInclude Include="..\..\src\include\openssl\hpke.h" />
+    <ClInclude Include="..\..\src\include\openssl\hrss.h" />
+    <ClInclude Include="..\..\src\include\openssl\is_boringssl.h" />
+    <ClInclude Include="..\..\src\include\openssl\lhash.h" />
+    <ClInclude Include="..\..\src\include\openssl\md4.h" />
+    <ClInclude Include="..\..\src\include\openssl\md5.h" />
+    <ClInclude Include="..\..\src\include\openssl\mem.h" />
+    <ClInclude Include="..\..\src\include\openssl\nid.h" />
+    <ClInclude Include="..\..\src\include\openssl\obj.h" />
+    <ClInclude Include="..\..\src\include\openssl\objects.h" />
+    <ClInclude Include="..\..\src\include\openssl\obj_mac.h" />
+    <ClInclude Include="..\..\src\include\openssl\opensslconf.h" />
+    <ClInclude Include="..\..\src\include\openssl\opensslv.h" />
+    <ClInclude Include="..\..\src\include\openssl\ossl_typ.h" />
+    <ClInclude Include="..\..\src\include\openssl\pem.h" />
+    <ClInclude Include="..\..\src\include\openssl\pkcs12.h" />
+    <ClInclude Include="..\..\src\include\openssl\pkcs7.h" />
+    <ClInclude Include="..\..\src\include\openssl\pkcs8.h" />
+    <ClInclude Include="..\..\src\include\openssl\poly1305.h" />
+    <ClInclude Include="..\..\src\include\openssl\pool.h" />
+    <ClInclude Include="..\..\src\include\openssl\rand.h" />
+    <ClInclude Include="..\..\src\include\openssl\rc4.h" />
+    <ClInclude Include="..\..\src\include\openssl\ripemd.h" />
+    <ClInclude Include="..\..\src\include\openssl\rsa.h" />
+    <ClInclude Include="..\..\src\include\openssl\safestack.h" />
+    <ClInclude Include="..\..\src\include\openssl\service_indicator.h" />
+    <ClInclude Include="..\..\src\include\openssl\sha.h" />
+    <ClInclude Include="..\..\src\include\openssl\siphash.h" />
+    <ClInclude Include="..\..\src\include\openssl\span.h" />
+    <ClInclude Include="..\..\src\include\openssl\srtp.h" />
+    <ClInclude Include="..\..\src\include\openssl\ssl.h" />
+    <ClInclude Include="..\..\src\include\openssl\ssl3.h" />
+    <ClInclude Include="..\..\src\include\openssl\stack.h" />
+    <ClInclude Include="..\..\src\include\openssl\thread.h" />
+    <ClInclude Include="..\..\src\include\openssl\tls1.h" />
+    <ClInclude Include="..\..\src\include\openssl\trust_token.h" />
+    <ClInclude Include="..\..\src\include\openssl\type_check.h" />
+    <ClInclude Include="..\..\src\include\openssl\x509.h" />
+    <ClInclude Include="..\..\src\include\openssl\x509v3.h" />
+    <ClInclude Include="..\..\src\include\openssl\x509_vfy.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
