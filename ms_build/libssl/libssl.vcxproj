@@ -188,7 +188,6 @@
     <ClCompile Include="..\..\src\crypto\bio\socket_helper.c" />
     <ClCompile Include="..\..\src\crypto\blake2\blake2.c" />
     <ClCompile Include="..\..\src\crypto\bn_extra\bn_asn1.c" />
-    <ClCompile Include="..\..\src\crypto\bn_extra\convert.c" />
     <ClCompile Include="..\..\src\crypto\buf\buf.c" />
     <ClCompile Include="..\..\src\crypto\bytestring\asn1_compat.c" />
     <ClCompile Include="..\..\src\crypto\bytestring\ber.c" />
@@ -198,8 +197,6 @@
     <ClCompile Include="..\..\src\crypto\chacha\chacha.c" />
     <ClCompile Include="..\..\src\crypto\cipher_extra\cipher_extra.c" />
     <ClCompile Include="..\..\src\crypto\cipher_extra\derive_key.c" />
-    <ClCompile Include="..\..\src\crypto\cipher_extra\e_aesctrhmac.c" />
-    <ClCompile Include="..\..\src\crypto\cipher_extra\e_aesgcmsiv.c" />
     <ClCompile Include="..\..\src\crypto\cipher_extra\e_chacha20poly1305.c" />
     <ClCompile Include="..\..\src\crypto\cipher_extra\e_des.c" />
     <ClCompile Include="..\..\src\crypto\cipher_extra\e_null.c" />
@@ -223,18 +220,13 @@
     <ClCompile Include="..\..\src\crypto\dh_extra\dh_asn1.c" />
     <ClCompile Include="..\..\src\crypto\dh_extra\params.c" />
     <ClCompile Include="..\..\src\crypto\digest_extra\digest_extra.c" />
-    <ClCompile Include="..\..\src\crypto\dsa\dsa.c" />
     <ClCompile Include="..\..\src\crypto\dsa\dsa_asn1.c" />
-    <ClCompile Include="..\..\src\crypto\ecdh_extra\ecdh_extra.c" />
     <ClCompile Include="..\..\src\crypto\ecdsa_extra\ecdsa_asn1.c" />
-    <ClCompile Include="..\..\src\crypto\ec_extra\ec_asn1.c" />
     <ClCompile Include="..\..\src\crypto\ec_extra\ec_derive.c" />
-    <ClCompile Include="..\..\src\crypto\ec_extra\hash_to_curve.c" />
     <ClCompile Include="..\..\src\crypto\engine\engine.c" />
     <ClCompile Include="..\..\src\crypto\err\err.c" />
     <ClCompile Include="..\..\src\crypto\evp\evp.c" />
     <ClCompile Include="..\..\src\crypto\evp\evp_asn1.c" />
-    <ClCompile Include="..\..\src\crypto\evp\evp_ctx.c" />
     <ClCompile Include="..\..\src\crypto\evp\pbkdf.c" />
     <ClCompile Include="..\..\src\crypto\evp\print.c" />
     <ClCompile Include="..\..\src\crypto\evp\p_dsa_asn1.c" />
@@ -242,7 +234,6 @@
     <ClCompile Include="..\..\src\crypto\evp\p_ec_asn1.c" />
     <ClCompile Include="..\..\src\crypto\evp\p_ed25519.c" />
     <ClCompile Include="..\..\src\crypto\evp\p_ed25519_asn1.c" />
-    <ClCompile Include="..\..\src\crypto\evp\p_rsa.c" />
     <ClCompile Include="..\..\src\crypto\evp\p_rsa_asn1.c" />
     <ClCompile Include="..\..\src\crypto\evp\p_x25519.c" />
     <ClCompile Include="..\..\src\crypto\evp\p_x25519_asn1.c" />
@@ -291,9 +282,6 @@
     <ClCompile Include="..\..\src\crypto\thread_none.c" />
     <ClCompile Include="..\..\src\crypto\thread_pthread.c" />
     <ClCompile Include="..\..\src\crypto\thread_win.c" />
-    <ClCompile Include="..\..\src\crypto\trust_token\pmbtoken.c" />
-    <ClCompile Include="..\..\src\crypto\trust_token\trust_token.c" />
-    <ClCompile Include="..\..\src\crypto\trust_token\voprf.c" />
     <ClCompile Include="..\..\src\crypto\x509v3\pcy_cache.c" />
     <ClCompile Include="..\..\src\crypto\x509v3\pcy_data.c" />
     <ClCompile Include="..\..\src\crypto\x509v3\pcy_lib.c" />

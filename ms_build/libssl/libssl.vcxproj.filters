@@ -438,9 +438,6 @@
     <ClCompile Include="..\..\src\crypto\bn_extra\bn_asn1.c">
       <Filter>libcrypto_sources\crypto\bn_extra</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\crypto\bn_extra\convert.c">
-      <Filter>libcrypto_sources\crypto\bn_extra</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\crypto\buf\buf.c">
       <Filter>libcrypto_sources\crypto\buf</Filter>
     </ClCompile>
@@ -466,12 +463,6 @@
       <Filter>libcrypto_sources\crypto\cipher_extra</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\crypto\cipher_extra\derive_key.c">
-      <Filter>libcrypto_sources\crypto\cipher_extra</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\crypto\cipher_extra\e_aesctrhmac.c">
-      <Filter>libcrypto_sources\crypto\cipher_extra</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\crypto\cipher_extra\e_aesgcmsiv.c">
       <Filter>libcrypto_sources\crypto\cipher_extra</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\crypto\cipher_extra\e_chacha20poly1305.c">
@@ -516,23 +507,11 @@
     <ClCompile Include="..\..\src\crypto\digest_extra\digest_extra.c">
       <Filter>libcrypto_sources\crypto\digest_extra</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\crypto\dsa\dsa.c">
-      <Filter>libcrypto_sources\crypto\dsa</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\crypto\dsa\dsa_asn1.c">
       <Filter>libcrypto_sources\crypto\dsa</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\crypto\ec_extra\ec_asn1.c">
-      <Filter>libcrypto_sources\crypto\ec_extra</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\crypto\ec_extra\ec_derive.c">
       <Filter>libcrypto_sources\crypto\ec_extra</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\crypto\ec_extra\hash_to_curve.c">
-      <Filter>libcrypto_sources\crypto\ec_extra</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\crypto\ecdh_extra\ecdh_extra.c">
-      <Filter>libcrypto_sources\crypto\ecdh_extra</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\crypto\ecdsa_extra\ecdsa_asn1.c">
       <Filter>libcrypto_sources\crypto\ecdsa_extra</Filter>
@@ -547,9 +526,6 @@
       <Filter>libcrypto_sources\crypto\evp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\crypto\evp\evp_asn1.c">
-      <Filter>libcrypto_sources\crypto\evp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\crypto\evp\evp_ctx.c">
       <Filter>libcrypto_sources\crypto\evp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\crypto\evp\pbkdf.c">
@@ -571,9 +547,6 @@
       <Filter>libcrypto_sources\crypto\evp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\crypto\evp\p_ed25519_asn1.c">
-      <Filter>libcrypto_sources\crypto\evp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\crypto\evp\p_rsa.c">
       <Filter>libcrypto_sources\crypto\evp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\crypto\evp\p_rsa_asn1.c">
@@ -695,15 +668,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\crypto\stack\stack.c">
       <Filter>libcrypto_sources\crypto\stack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\crypto\trust_token\pmbtoken.c">
-      <Filter>libcrypto_sources\crypto\trust_token</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\crypto\trust_token\trust_token.c">
-      <Filter>libcrypto_sources\crypto\trust_token</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\crypto\trust_token\voprf.c">
-      <Filter>libcrypto_sources\crypto\trust_token</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\crypto\x509\algorithm.c">
       <Filter>libcrypto_sources\crypto\x509</Filter>
