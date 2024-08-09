@@ -46,27 +46,31 @@ inferred_mode() {
   fi
 }
 
+MODE=`inferred_mode`
 # Prefer mode from command line if present.
-case "$1" in
-  local|device)
-    MODE=$1
-    ;;
+while [ "$1" ]; do
+  case "$1" in
+    local|device)
+      MODE=$1
+      ;;
 
-  "")
-    MODE=`inferred_mode`
-    ;;
+    "32")
+      TEST32BIT="true"
+      ;;
 
-  *)
-    usage
-    ;;
-esac
+    *)
+      usage
+      ;;
+  esac
+  shift
+done
 
 check_directory() {
-  test -d $1 || die "Directory $1 not found."
+  test -d "$1" || die "Directory $1 not found."
 }
 
 check_file() {
-  test -f $1 || die "File $1 not found."
+  test -f "$1" || die "File $1 not found."
 }
 
 run_test_locally() {
@@ -76,53 +80,43 @@ run_test_locally() {
 run_test_on_device() {
   EXECFILE="$1"
   LIBRARY="$2"
-  adb shell rm -rf $DEVICE_TMP
-  adb shell mkdir -p $DEVICE_TMP
-  adb push $EXECFILE $DEVICE_TMP > /dev/null
-  EXECPATH=$(basename $EXECFILE)
-  adb push $LIBRARY $DEVICE_TMP > /dev/null
-  CMD="LD_LIBRARY_PATH=$DEVICE_TMP $DEVICE_TMP/$EXECPATH"
-  if [ "$BORINGSSL_FIPS_BREAK_TEST" ]; then
-    CMD="BORINGSSL_FIPS_BREAK_TEST=$BORINGSSL_FIPS_BREAK_TEST $CMD"
-  fi
-  adb shell "$CMD" || true
+  adb shell rm -rf "$DEVICE_TMP"
+  adb shell mkdir -p "$DEVICE_TMP"
+  adb push "$EXECFILE" "$DEVICE_TMP" > /dev/null
+  EXECPATH=$(basename "$EXECFILE")
+  adb push "$LIBRARY" "$DEVICE_TMP" > /dev/null
+  adb shell "LD_LIBRARY_PATH=$DEVICE_TMP" "$DEVICE_TMP/$EXECPATH" || true
 }
 
 device_integrity_break_test() {
-  go run $BORINGSSL/util/fipstools/break-hash.go $LIBCRYPTO_BIN ./libcrypto.so
-  $RUN $TEST_FIPS_BIN ./libcrypto.so
+  go run "$BORINGSSL/util/fipstools/break-hash.go" "$LIBCRYPTO_BIN" ./libcrypto.so
+  $RUN "$TEST_FIPS_BIN" ./libcrypto.so
   rm ./libcrypto.so
 }
 
 local_integrity_break_test() {
-  go run $BORINGSSL/util/fipstools/break-hash.go $TEST_FIPS_BIN ./break-bin
+  go run $BORINGSSL/util/fipstools/break-hash.go "$TEST_FIPS_BIN" ./break-bin
   chmod u+x ./break-bin
   $RUN ./break-bin
   rm ./break-bin
 }
 
 local_runtime_break_test() {
-  BORINGSSL_FIPS_BREAK_TEST=$1 $RUN $TEST_FIPS_BREAK_BIN
-}
-
-device_runtime_break_test() {
-  cp $LIBCRYPTO_BREAK_BIN ./libcrypto.so
-  BORINGSSL_FIPS_BREAK_TEST=$1 $RUN $TEST_FIPS_BIN ./libcrypto.so
-  rm ./libcrypto.so
+  BORINGSSL_FIPS_BREAK_TEST=$1 "$RUN" "$TEST_FIPS_BREAK_BIN"
 }
 
 # TODO(prb): make break-hash and break-kat take similar arguments to save having
 # separate functions for each.
 device_kat_break_test() {
   KAT="$1"
-  go run $BORINGSSL/util/fipstools/break-kat.go $LIBCRYPTO_BREAK_BIN $KAT > ./libcrypto.so
-  $RUN $TEST_FIPS_BIN ./libcrypto.so
+  go run "$BORINGSSL/util/fipstools/break-kat.go" "$LIBCRYPTO_BREAK_BIN" "$KAT" > ./libcrypto.so
+  $RUN "$TEST_FIPS_BIN" ./libcrypto.so
   rm ./libcrypto.so
 }
 
 local_kat_break_test() {
   KAT="$1"
-  go run $BORINGSSL/util/fipstools/break-kat.go $TEST_FIPS_BREAK_BIN $KAT > ./break-bin
+  go run "$BORINGSSL/util/fipstools/break-kat.go" "$TEST_FIPS_BREAK_BIN" "$KAT" > ./break-bin
   chmod u+x ./break-bin
   $RUN ./break-bin
   rm ./break-bin
@@ -135,15 +129,9 @@ pause () {
 
 if [ "$MODE" = "local" ]; then
   TEST_FIPS_BIN=${TEST_FIPS_BIN:-build/util/fipstools/test_fips}
-  check_file $TEST_FIPS_BIN
-
   TEST_FIPS_BREAK_BIN=${TEST_FIPS_BREAK_BIN:-./test_fips_break}
-  if [ ! -f $TEST_FIPS_BREAK_BIN ]; then
-    echo "$TEST_FIPS_BREAK_BIN is missing. Build BoringSSL with "
-    echo "-DFIPS_BREAK_TEST=TESTS passed to CMake and copy the resulting"
-    echo "test_fips binary to $TEST_FIPS_BREAK_BIN."
-    exit 1
-  fi
+  check_file "$TEST_FIPS_BIN"
+  check_file "$TEST_FIPS_BREAK_BIN"
 
   BORINGSSL=.
   RUN=run_test_locally
@@ -151,15 +139,26 @@ if [ "$MODE" = "local" ]; then
   INTEGRITY_BREAK_TEST=local_integrity_break_test
   KAT_BREAK_TEST=local_kat_break_test
   RUNTIME_BREAK_TEST=local_runtime_break_test
+  if [ ! -f "$TEST_FIPS_BIN" ]; then
+    echo "$TEST_FIPS_BIN is missing. Run this script from the top level of a"
+    echo "BoringSSL checkout and ensure that BoringSSL has been built in"
+    echo "build/ with -DFIPS_BREAK_TEST=TESTS passed to CMake."
+    exit 1
+  fi
 else # Device mode
   test "$ANDROID_BUILD_TOP" || die "'lunch aosp_arm64-eng' first"
   check_directory "$ANDROID_PRODUCT_OUT"
-  test "$TARGET_PRODUCT" =  "aosp_arm64" || die "Lunch target is $TARGET_PRODUCT not aosp_arm64"
 
-  TEST_FIPS_BIN="$ANDROID_PRODUCT_OUT/system/bin/test_fips"
+  if [ "$TEST32BIT" ]; then
+    TEST_FIPS_BIN="$ANDROID_PRODUCT_OUT/system/bin/test_fips32"
+    LIBCRYPTO_BIN="$ANDROID_PRODUCT_OUT/system/lib/libcrypto.so"
+    LIBCRYPTO_BREAK_BIN="$ANDROID_PRODUCT_OUT/system/lib/libcrypto_for_testing.so"
+  else
+    TEST_FIPS_BIN="$ANDROID_PRODUCT_OUT/system/bin/test_fips"
+    LIBCRYPTO_BIN="$ANDROID_PRODUCT_OUT/system/lib64/libcrypto.so"
+    LIBCRYPTO_BREAK_BIN="$ANDROID_PRODUCT_OUT/system/lib64/libcrypto_for_testing.so"
+  fi
   check_file "$TEST_FIPS_BIN"
-  LIBCRYPTO_BIN="$ANDROID_PRODUCT_OUT/system/lib64/libcrypto.so"
-  LIBCRYPTO_BREAK_BIN="$ANDROID_PRODUCT_OUT/system/lib64/libcrypto_for_testing.so"
   check_file "$LIBCRYPTO_BIN"
   check_file "$LIBCRYPTO_BREAK_BIN"
 
@@ -170,14 +169,13 @@ else # Device mode
   RUN=run_test_on_device
   INTEGRITY_BREAK_TEST=device_integrity_break_test
   KAT_BREAK_TEST=device_kat_break_test
-  RUNTIME_BREAK_TEST=device_runtime_break_test
 fi
 
 
-KATS=$(go run $BORINGSSL/util/fipstools/break-kat.go --list-tests)
+KATS=$(go run "$BORINGSSL/util/fipstools/break-kat.go" --list-tests)
 
 echo -e '\033[1mNormal output\033[0m'
-$RUN $TEST_FIPS_BIN $LIBCRYPTO_BIN
+$RUN "$TEST_FIPS_BIN" "$LIBCRYPTO_BIN"
 pause
 
 echo
@@ -192,9 +190,12 @@ for kat in $KATS; do
   pause
 done
 
-for runtime_test in ECDSA_PWCT RSA_PWCT CRNG; do
-  echo
-  echo -e "\033[1m${runtime_test} failure\033[0m"
-  $RUNTIME_BREAK_TEST ${runtime_test}
-  pause
-done
+if [ "$MODE" = "local" ]; then
+  # TODO(prb): add support for Android devices.
+  for runtime_test in ECDSA_PWCT RSA_PWCT CRNG; do
+    echo
+    echo -e "\033[1m${runtime_test} failure\033[0m"
+    $RUNTIME_BREAK_TEST ${runtime_test}
+    pause
+  done
+fi

@@ -25,13 +25,11 @@
 #if defined(OPENSSL_ANDROID)
 
 #include <errno.h>
+#include <stdatomic.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>
 #include <unistd.h>
-
-static struct CRYPTO_STATIC_MUTEX g_socket_history_lock =
-    CRYPTO_STATIC_MUTEX_INIT;
 
 // socket_history_t enumerates whether the entropy daemon should be contacted
 // for a given entropy request. Values other than socket_not_yet_attempted are
@@ -47,14 +45,15 @@ enum socket_history_t {
   socket_failed,
 };
 
-enum socket_history_t g_socket_history = socket_not_yet_attempted;
+static _Atomic enum socket_history_t g_socket_history =
+    socket_not_yet_attempted;
 
 // DAEMON_RESPONSE_LEN is the number of bytes that the entropy daemon replies
 // with.
 #define DAEMON_RESPONSE_LEN 496
 
-OPENSSL_STATIC_ASSERT(ENTROPY_READ_LEN == DAEMON_RESPONSE_LEN,
-                      "entropy daemon response length mismatch");
+static_assert(ENTROPY_READ_LEN == DAEMON_RESPONSE_LEN,
+              "entropy daemon response length mismatch");
 
 static int get_seed_from_daemon(uint8_t *out_entropy, size_t out_entropy_len) {
   // |RAND_need_entropy| should never call this function for more than
@@ -63,10 +62,7 @@ static int get_seed_from_daemon(uint8_t *out_entropy, size_t out_entropy_len) {
     abort();
   }
 
-  CRYPTO_STATIC_MUTEX_lock_read(&g_socket_history_lock);
-  const enum socket_history_t socket_history = g_socket_history;
-  CRYPTO_STATIC_MUTEX_unlock_read(&g_socket_history_lock);
-
+  const enum socket_history_t socket_history = atomic_load(&g_socket_history);
   if (socket_history == socket_failed) {
     return 0;
   }
@@ -81,6 +77,8 @@ static int get_seed_from_daemon(uint8_t *out_entropy, size_t out_entropy_len) {
   memset(&sun, 0, sizeof(sun));
   sun.sun_family = AF_UNIX;
   static const char kSocketPath[] = "/dev/socket/prng_seeder";
+  static_assert(sizeof(kSocketPath) <= UNIX_PATH_MAX,
+                      "kSocketPath too long");
   OPENSSL_memcpy(sun.sun_path, kSocketPath, sizeof(kSocketPath));
 
   if (connect(sock, (struct sockaddr *)&sun, sizeof(sun))) {
@@ -113,11 +111,11 @@ static int get_seed_from_daemon(uint8_t *out_entropy, size_t out_entropy_len) {
 
 out:
   if (socket_history == socket_not_yet_attempted) {
-    CRYPTO_STATIC_MUTEX_lock_write(&g_socket_history_lock);
-    if (g_socket_history == socket_not_yet_attempted) {
-      g_socket_history = (ret == 0) ? socket_failed : socket_success;
-    }
-    CRYPTO_STATIC_MUTEX_unlock_write(&g_socket_history_lock);
+    enum socket_history_t expected = socket_history;
+    // If another thread has already updated |g_socket_history| then we defer
+    // to their value.
+    atomic_compare_exchange_strong(&g_socket_history, &expected,
+                                   (ret == 0) ? socket_failed : socket_success);
   }
 
   close(sock);

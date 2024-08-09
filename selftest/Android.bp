@@ -45,8 +45,10 @@ cc_binary {
     name: "boringssl_self_test",
     visibility: [
         "//art/build/sdk",
+        "//external/conscrypt",
         "//external/conscrypt/apex",
         "//external/conscrypt/apex/testing",
+        "//visibility:any_system_partition",
     ],
     defaults: ["boringssl_self_test_defaults"],
     apex_available: [
@@ -62,4 +64,25 @@ cc_binary {
     stem: "boringssl_self_test",
     vendor: true,
     init_rc: ["boringssl_self_test.rc"],
+    required: [
+        "boringssl_self_test.zygote64.rc",
+        "boringssl_self_test.zygote64_32.rc",
+    ],
+    visibility: ["//visibility:any_system_partition"],
+}
+
+prebuilt_etc {
+    name: "boringssl_self_test.zygote64_32.rc",
+    src: "boringssl_self_test.zygote64_32.rc",
+    vendor: true,
+    symlinks: [
+        "boringssl_self_test.zygote32.rc",
+        "boringssl_self_test.no_zygote.rc",
+    ],
+}
+
+prebuilt_etc {
+    name: "boringssl_self_test.zygote64.rc",
+    src: "boringssl_self_test.zygote64.rc",
+    vendor: true,
 }
