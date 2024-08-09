@@ -242,12 +242,12 @@ OPENSSL_EXPORT int bn_resize_words(BIGNUM *bn, size_t words);
 
 // bn_select_words sets |r| to |a| if |mask| is all ones or |b| if |mask| is
 // all zeros.
-void bn_select_words(BN_ULONG *r, BN_ULONG mask, const BN_ULONG *a,
+OPENSSL_EXPORT void bn_select_words(BN_ULONG *r, BN_ULONG mask, const BN_ULONG *a,
                      const BN_ULONG *b, size_t num);
 
 // bn_set_words sets |bn| to the value encoded in the |num| words in |words|,
 // least significant word first.
-int bn_set_words(BIGNUM *bn, const BN_ULONG *words, size_t num);
+OPENSSL_EXPORT int bn_set_words(BIGNUM *bn, const BN_ULONG *words, size_t num);
 
 // bn_set_static_words acts like |bn_set_words|, but doesn't copy the data. A
 // flag is set on |bn| so that |BN_free| won't attempt to free the data.
@@ -306,7 +306,7 @@ void bn_sqr_words(BN_ULONG *rp, const BN_ULONG *ap, size_t num);
 // are |num| words long. It returns the carry bit, which is one if the operation
 // overflowed and zero otherwise. Any pair of |ap|, |bp|, and |rp| may be equal
 // to each other but otherwise may not alias.
-BN_ULONG bn_add_words(BN_ULONG *rp, const BN_ULONG *ap, const BN_ULONG *bp,
+OPENSSL_EXPORT BN_ULONG bn_add_words(BN_ULONG *rp, const BN_ULONG *ap, const BN_ULONG *bp,
                       size_t num);
 
 // bn_sub_words subtracts |bp| from |ap| and places the result in |rp|. It
@@ -727,7 +727,7 @@ int bn_mod_inverse_secret_prime(BIGNUM *out, const BIGNUM *a, const BIGNUM *p,
 // this function assumes |mod| is public.
 //
 // If |*pmont| is already non-NULL then it does nothing and returns one.
-int BN_MONT_CTX_set_locked(BN_MONT_CTX **pmont, CRYPTO_MUTEX *lock,
+OPENSSL_EXPORT int BN_MONT_CTX_set_locked(BN_MONT_CTX **pmont, CRYPTO_MUTEX *lock,
                            const BIGNUM *mod, BN_CTX *bn_ctx);
 
 

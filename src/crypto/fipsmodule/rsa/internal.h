@@ -146,19 +146,19 @@ int BN_BLINDING_invert(BIGNUM *n, const BN_BLINDING *b, BN_MONT_CTX *mont_ctx,
                        BN_CTX *ctx);
 
 
-int PKCS1_MGF1(uint8_t *out, size_t len, const uint8_t *seed, size_t seed_len,
+OPENSSL_EXPORT int PKCS1_MGF1(uint8_t *out, size_t len, const uint8_t *seed, size_t seed_len,
                const EVP_MD *md);
 int RSA_padding_add_PKCS1_type_1(uint8_t *to, size_t to_len,
                                  const uint8_t *from, size_t from_len);
 int RSA_padding_check_PKCS1_type_1(uint8_t *out, size_t *out_len,
                                    size_t max_out, const uint8_t *from,
                                    size_t from_len);
-int RSA_padding_add_none(uint8_t *to, size_t to_len, const uint8_t *from,
+OPENSSL_EXPORT int RSA_padding_add_none(uint8_t *to, size_t to_len, const uint8_t *from,
                          size_t from_len);
 
 // rsa_check_public_key checks that |rsa|'s public modulus and exponent are
 // within DoS bounds.
-int rsa_check_public_key(const RSA *rsa);
+OPENSSL_EXPORT int rsa_check_public_key(const RSA *rsa);
 
 // rsa_private_transform_no_self_test calls either the method-specific
 // |private_transform| function (if given) or the generic one. See the comment
@@ -169,7 +169,7 @@ int rsa_private_transform_no_self_test(RSA *rsa, uint8_t *out,
 // rsa_private_transform acts the same as |rsa_private_transform_no_self_test|
 // but, in FIPS mode, performs an RSA self test before calling the default RSA
 // implementation.
-int rsa_private_transform(RSA *rsa, uint8_t *out, const uint8_t *in,
+OPENSSL_EXPORT int rsa_private_transform(RSA *rsa, uint8_t *out, const uint8_t *in,
                           size_t len);
 
 // rsa_invalidate_key is called after |rsa| has been mutated, to invalidate

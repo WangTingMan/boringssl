@@ -49,7 +49,7 @@ struct dh_st {
 // dh_check_params_fast checks basic invariants on |dh|'s domain parameters. It
 // does not check that |dh| forms a valid group, only that the sizes are within
 // DoS bounds.
-int dh_check_params_fast(const DH *dh);
+OPENSSL_EXPORT int dh_check_params_fast(const DH *dh);
 
 // dh_compute_key_padded_no_self_test does the same as |DH_compute_key_padded|,
 // but doesn't try to run the self-test first. This is for use in the self tests
