@@ -79,7 +79,10 @@ cc_defaults {
         "-DBORINGSSL_NO_STATIC_INITIALIZER",
         "-DANDROID_BAREMETAL",
     ],
-    defaults: ["boringssl_flags_common"],
+    defaults: [
+        "boringssl_flags_common",
+        "cc_baremetal_defaults",
+    ],
     apex_available: [
         "com.android.virt",
     ],
@@ -182,11 +185,13 @@ cc_object {
         "com.android.adservices",
         "com.android.btservices",
         "com.android.compos",
+        "com.android.configinfrastructure",
         "com.android.conscrypt",
         "com.android.extservices",
         "com.android.ondevicepersonalization",
         "com.android.resolv",
         "com.android.virt",
+        "com.android.wifi",
     ],
 }
 
@@ -284,11 +289,13 @@ cc_library {
         "com.android.adservices",
         "com.android.btservices",
         "com.android.compos",
+        "com.android.configinfrastructure",
         "com.android.conscrypt",
         "com.android.extservices",
-        "com.android.resolv",
         "com.android.ondevicepersonalization",
+        "com.android.resolv",
         "com.android.virt",
+        "com.android.wifi",
     ],
     min_sdk_version: "29",
     afdo: true,
@@ -344,11 +351,13 @@ cc_library {
 cc_library_static {
     name: "libcrypto_static",
     visibility: [
+        "//art/dex2oat",
+        "//art/tools/hiddenapi",
         "//bootable/recovery/updater",
         "//bootable/deprecated-ota/updater",
         "//external/conscrypt",
         "//external/python/cpython2",
-        "//external/rust/crates/quiche",
+        "//external/rust/android-crates-io/crates/quiche",
         // Strictly, only the *static* toybox for legacy devices should have
         // access to libcrypto_static, but we can't express that.
         "//external/toybox",
@@ -359,6 +368,7 @@ cc_library_static {
         "//hardware/interfaces/keymaster/3.0/vts/functional",
         "//hardware/interfaces/keymaster/4.0/vts/functional",
         "//hardware/interfaces/keymaster/4.1/vts/functional",
+        "//libcore",
         "//packages/modules/adb",
         "//packages/modules/AdServices:__subpackages__",
         "//packages/modules/DnsResolver/tests:__subpackages__",
@@ -377,6 +387,8 @@ cc_library_static {
     apex_available: [
         "//apex_available:platform",
         "com.android.adservices",
+        "com.android.art",
+        "com.android.art.debug",
         "com.android.extservices",
         "com.android.neuralnetworks",
     ],
@@ -404,46 +416,12 @@ cc_library_static {
         "//packages/modules/Virtualization:__subpackages__",
         "//system/security/diced/open_dice",
     ],
-}
 
-// For static linking into the ART module to provide limited functionality:
-// bignums and SHA1 for ELF checksums.
-cc_library_static {
-    name: "libcrypto_for_art",
-    defaults: [
-        "libcrypto_defaults",
-        "boringssl_defaults",
-    ],
-    srcs: [
-        "src/crypto/cpu_*.c",
-        "src/crypto/crypto.c",
-        "src/crypto/err/err.c",
-        "src/crypto/fipsmodule/bn/*.c",
-        "src/crypto/fipsmodule/bn/asm/*.c",
-        "src/crypto/fipsmodule/rand/*.c",
-        "src/crypto/fipsmodule/sha/sha1.c",
-        "src/crypto/mem.c",
-        "src/crypto/stack/stack.c",
-        "src/crypto/thread_pthread.c",
-        "src/gen/crypto/err_data.c",
-    ],
-    target: {
-        linux: {
-            srcs: [
-                "src/gen/bcm/*-linux.S",
-            ],
-        },
+    // b/336916369: This library gets linked into a rust rlib.  Disable LTO
+    // until cross-language lto is supported.
+    lto: {
+        never: true,
     },
-    visibility: [
-        "//art:__subpackages__",
-        "//libcore:__subpackages__",
-    ],
-    apex_available: [
-        "com.android.art",
-        "com.android.art.debug",
-        "com.android.art.testing",
-    ],
-    min_sdk_version: "29",
 }
 
 // Common defaults for lib*_fuzz_unsafe. These are unsafe and deterministic
@@ -505,11 +483,13 @@ cc_library {
 
     apex_available: [
         "//apex_available:platform",
-        "com.android.btservices",
         "com.android.adbd",
+        "com.android.btservices",
+        "com.android.configinfrastructure",
         "com.android.conscrypt",
         "com.android.resolv",
         "com.android.virt",
+        "com.android.wifi",
     ],
     min_sdk_version: "29",
 }
@@ -656,6 +636,7 @@ cc_test_library {
 cc_test {
     name: "boringssl_crypto_test",
     test_config: "CryptoNativeTests.xml",
+    test_suites: ["general-tests"],
     host_supported: false,
     vendor_available: false,
     product_available: false,
@@ -690,6 +671,7 @@ cc_test {
 cc_test {
     name: "boringssl_ssl_test",
     test_config: "SslNativeTests.xml",
+    test_suites: ["general-tests"],
     host_supported: false,
     vendor_available: false,
     product_available: false,
@@ -738,6 +720,9 @@ cc_binary {
     defaults: [
         "boringssl_flags",
     ],
+    cflags: [
+        "-DBORINGSSL_FIPS",
+    ],
     shared_libs: [
         "libcrypto",
     ],
@@ -779,8 +764,10 @@ rust_bindgen {
         "libcrypto",
         "libssl",
     ],
+    min_sdk_version: "29",
     apex_available: [
         "//apex_available:platform",
+        "com.android.configinfrastructure",
         "com.android.virt",
     ],
 }
@@ -826,10 +813,18 @@ cc_library_static {
         "libcrypto",
         "libssl",
     ],
+    min_sdk_version: "29",
     apex_available: [
         "//apex_available:platform",
+        "com.android.configinfrastructure",
         "com.android.virt",
     ],
+
+    // b/336916369: This library gets linked into a rust rlib.  Disable LTO
+    // until cross-language lto is supported.
+    lto: {
+        never: true,
+    },
 }
 
 cc_library_static {
@@ -840,6 +835,12 @@ cc_library_static {
         "libcrypto_baremetal",
         "libssl_baremetal",
     ],
+
+    // b/336916369: This library gets linked into a rust rlib.  Disable LTO
+    // until cross-language lto is supported.
+    lto: {
+        never: true,
+    },
 }
 
 cc_library_host_static {
@@ -858,6 +859,7 @@ rust_defaults {
     crate_name: "bssl_sys",
     visibility: [
         "//external/rust/crates/openssl",
+        "//external/rust/android-crates-io/crates/tokio-openssl",
         "//system/keymint/boringssl",
         "//system/security/prng_seeder",
     ],
@@ -879,8 +881,10 @@ rust_library {
     whole_static_libs: [
         "libbssl_rust_support",
     ],
+    min_sdk_version: "29",
     apex_available: [
         "//apex_available:platform",
+        "com.android.configinfrastructure",
         "com.android.virt",
     ],
     cfgs: ["unsupported_inline_wrappers"],
@@ -952,4 +956,10 @@ rust_test {
     crate_name: "bssl_crypto_test",
     test_suites: ["general-tests"],
     auto_gen_config: true,
+}
+
+dirgroup {
+    name: "trusty_dirgroup_external_boringssl",
+    dirs: ["."],
+    visibility: ["//trusty/vendor/google/aosp/scripts"],
 }
